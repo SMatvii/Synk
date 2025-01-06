@@ -4,7 +4,7 @@ from sqlalchemy import select, update, delete
 from sqlalchemy.orm import Session
 
 
-from ..db import User, Comment, get_session
+from ..db import Post, Comment, get_session
 from ..schemas import CommentModel
 
 
@@ -29,7 +29,7 @@ def get_comments_for_post(post_id: int, session: Annotated[Session, Depends(get_
     return comments
 
 
-@comment_router.put("/update/{id}")
+@comment_router.put("/update/{comment_id}")
 def update_comment(
     data: CommentModel,
     comment_id: int,
@@ -54,23 +54,23 @@ def delete_comment(comment_id: int, session: Annotated[Session, Depends(get_sess
     comment = session.scalar(select(Comment).where(Comment.id == comment_id))
     if not comment:
         raise HTTPException(
-            status_code=404, detail=f"Post with id {comment_id} not found"
+            status_code=404, detail=f"Comment with id {comment_id} not found"
         )
     session.delete(comment)
     session.commit()
-    return {"detail": f"Post with id {comment_id} deleted successfully"}
+    return {"detail": f"Comment with id {comment_id} deleted successfully"}
 
 
-@comment_router.delete("/delete_all/{user_id}")
-def delete_all_user_comment(
-    user_id: int, session: Annotated[Session, Depends(get_session)]
+@comment_router.delete("/delete_all/{post_id}")
+def delete_all_post_comments(
+    post_id: int, session: Annotated[Session, Depends(get_session)]
 ):
-    user = session.scalar(select(User).where(User.id == user_id))
-    if not user:
-        raise HTTPException(status_code=404, detail=f"No user with id {user_id}")
+    post = session.scalar(select(Post).where(Post.id == post_id))
+    if not post:
+        raise HTTPException(status_code=404, detail=f"No post with id {post_id}")
 
-    session.execute(delete(Comment).where(Comment.user_id == user_id))
+    session.execute(delete(Comment).where(Comment.post_id == post_id))
     session.commit()
     return {
-        "detail": f"All posts by user with id {user_id} have been deleted successfully"
+        "detail": f"All comments of the post with id {post_id} have been deleted successfully"
     }
