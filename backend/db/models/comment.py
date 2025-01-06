@@ -1,13 +1,13 @@
-from .config import Config
-from .mixins import PUBMixin,PKMixin
-from sqlalchemy.orm import Mapped,mapped_column, relationship
 from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from .config import Config
+from .mixins import PUBMixin, PKMixin
 
 
 Base = Config.BASE
 
 
-class Comment(PKMixin,Base,PUBMixin):
+class Comment(PKMixin, Base, PUBMixin):
     __tablename__ = "comments"
 
     content: Mapped[str]
@@ -17,4 +17,3 @@ class Comment(PKMixin,Base,PUBMixin):
 
     user: Mapped["User"] = relationship(back_populates="comments")
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-

@@ -1,9 +1,9 @@
 from typing import List
 
+from sqlalchemy.orm import Mapped, relationship
+
 from .config import Config
 from .mixins import PKMixin
-
-from sqlalchemy.orm import Mapped, relationship
 
 
 Base = Config.BASE

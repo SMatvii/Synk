@@ -10,9 +10,9 @@ from ..db import Config, User
 Session=Config.SESSION
 
 class PostModel(BaseModel):
-    title:str = Field(max_length=20)
-    content:str 
-    user_id:int
+    title: str = Field(max_length=20)
+    content: str 
+    user_id: int
 
     @field_validator("user_id")
     @classmethod
