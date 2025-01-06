@@ -30,4 +30,4 @@ class CommentModel(BaseModel):
             if post: 
                 return v 
             else: 
-                raise HTTPException(status_code=404, detail=f"No user with this id:{v}")
+                raise HTTPException(status_code=404, detail=f"No post with this id:{v}")
