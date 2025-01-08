@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, HTTPException, Depends, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, select, update, delete
 
 
 from ..db import User, get_session
@@ -20,27 +20,27 @@ def registrate_user(data: UserModel, session: Annotated[Session, Depends(get_ses
 
 @user_router.get("/get/{id}", status_code=status.HTTP_200_OK)
 def get_user(id: int, session: Annotated[Session, Depends(get_session)]):
-    user = session.get(User, id)
+    user = session.scalar(select(User).where(User.id == id))
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail=f"User with id {id} not found")
     return user
 
 @user_router.put("/update/{id}", status_code=status.HTTP_200_OK)
 def update_user(id: int, data: UserModel, session: Annotated[Session, Depends(get_session)]):
-    user = session.get(User, id)
+    user = session.scalar(select(User).where(User.id == id))
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    for key, value in data.model_dump().items():
-        setattr(user, key, value)
+        raise HTTPException(status_code=404, detail=f"User with id {id} not found")
+    
+    user_update = update(User).where(User.id == id).values(**data.model_dump())
+    session.execute(user_update)
     session.commit()
-    session.refresh(user)
-    return user
+    return {"detail": f"User with id {id} updated successfully"}
 
 @user_router.delete("/delete/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(id: int, session: Annotated[Session, Depends(get_session)]):
-    user = session.get(User, id)
+    user = session.scalar(select(User).where(User.id == id))
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail=f"User with id {id} not found")
     session.delete(user)
     session.commit()
-    return {"message": "User deleted"}
+    return {"detail": f"User with id {id} deleted successfully"}
