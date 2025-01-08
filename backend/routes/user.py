@@ -14,8 +14,6 @@ user_router = APIRouter(prefix="/users", tags=["Users"])
 def registrate_user(data: UserModel, session: Annotated[Session, Depends(get_session)]):
     user = User(**data.model_dump())
     session.add(user)
-    session.commit()
-    session.refresh(user)
     return user
 
 @user_router.get("/get/{id}", status_code=status.HTTP_200_OK)
