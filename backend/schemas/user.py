@@ -23,7 +23,7 @@ class UserModel(BaseModel):
                 )
             return v
 
-    @field_validator("user")
+    @field_validator("name")
     @classmethod
     def check_name(cls, v):
         with Session.begin() as session:
