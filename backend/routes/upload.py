@@ -1,13 +1,9 @@
 import os
 import asyncio
 from typing import List
-import uvicorn
 from dotenv import load_dotenv
 
-
-from fastapi import FastAPI, UploadFile, BackgroundTasks, HTTPException
-
-app = FastAPI()
+from fastapi import UploadFile, BackgroundTasks, HTTPException, APIRouter
 
 load_dotenv()
 
@@ -18,6 +14,7 @@ FORMATS = ["image/png", "image/gif", "image/jpeg", "image/jpg"]
 
 os.makedirs(TMP_FOLDER, exist_ok=True)
 
+upload_router = APIRouter(prefix="/upload", tags=["Upload"])
 
 async def save_image(image: bytes, file_path: str):
     await asyncio.sleep(3)
@@ -25,7 +22,7 @@ async def save_image(image: bytes, file_path: str):
         buffer.write(image)
 
 
-@app.post("/upload_image")
+@upload_router.post("/image")
 async def upload(images: List[UploadFile], background_tasks: BackgroundTasks):
     valid_files = [
         image
@@ -53,7 +50,3 @@ async def upload(images: List[UploadFile], background_tasks: BackgroundTasks):
         )
 
     return {"uploaded_files": images_list, "folder": folder}
-
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="localhost", port=8080)
