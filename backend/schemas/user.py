@@ -6,6 +6,7 @@ from ..db import Config, User
 
 Session = Config.SESSION
 
+
 class UserModel(BaseModel):
     name: str = Field(..., description="Username")
     email: EmailStr = Field(..., description="User email")
@@ -15,7 +16,20 @@ class UserModel(BaseModel):
     @classmethod
     def check_email(cls, v):
         with Session.begin() as session:
-            user = session.scalar(select(User).where(User.email==v))
+            user = session.scalar(select(User).where(User.email == v))
             if user:
-                raise HTTPException(status_code=400,detail="User with this email exists")
+                raise HTTPException(
+                    status_code=400, detail="User with this email exists"
+                )
+            return v
+
+    @field_validator("user")
+    @classmethod
+    def check_name(cls, v):
+        with Session.begin() as session:
+            user = session.scalar(select(User).where(User.name == v))
+            if user:
+                raise HTTPException(
+                    status_code=400, detail="User with this name exists"
+                )
             return v
