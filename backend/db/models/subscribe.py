@@ -2,12 +2,12 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 
 from .config import Config
-
+from .mixins import PKMixin
 
 Base = Config.BASE
 
 
-class Subscribe(Base):
+class Subscribe(PKMixin,Base):
     __tablename__ = "subscriptions"
 
     subscriber_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
