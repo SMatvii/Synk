@@ -20,3 +20,18 @@ class User(PKMixin, Base):
     posts: Mapped[List["Post"]] = relationship(back_populates="user")
 
     comments: Mapped[List["Comment"]] = relationship(back_populates="user")
+
+    subscriptions: Mapped[List["Subscribe"]] = relationship(
+        back_populates="subscriber",
+        cascade="all, delete-orphan",
+        foreign_keys="Subscribe.subscriber_id",
+    )
+
+    subscribers: Mapped[List["Subscribe"]] = relationship(
+        back_populates="subscribed_to",
+        cascade="all, delete-orphan",
+        foreign_keys="Subscribe.subscribed_to_id",
+    )
+
+    subscribers_count: Mapped[int] = mapped_column(default=0)
+    subscribtions_count: Mapped[int] = mapped_column(default=0)
