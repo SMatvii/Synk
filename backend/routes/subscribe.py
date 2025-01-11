@@ -2,6 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends, Response, APIRouter
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 
 from ..db import User, get_session, Subscribe
 from ..utils import get_current_user, find_user_by_id, is_already_subscribed
@@ -57,13 +58,21 @@ def unsubscribe(
     return "Unsubscribed"
 
 
-# @app.get("/subscribers/<string:username>")
-# def get_user_subscribers(username: str):
-#     with Session.begin() as session:
-#         user = session.scalar(select(User).where(User.nickname == username))
-#         if not user:
-#             return {"error": "User not found"}, 404
-#         subscriber_ids = session.scalars(select(Subscribe.subscriber_id).where(Subscribe.subscribed_to_id == user.id)).all()
-#         subscribers = session.scalars(select(User.nickname).where(User.id.in_(subscriber_ids))).all()
-#         print(subscribers)
-#         return {"subscribers" : subscribers}
+@subscribe_router.get("/subscribers/{user_id}")
+def get_user_subscribers(user_id: str, session: Annotated[Session, Depends(get_session)]):
+    user = session.scalar(select(User).where(User.id == user_id))
+    if not user:
+        return Response("User not found", status_code=404)
+    subscriber_ids = session.scalars(select(Subscribe.subscriber_id).where(Subscribe.subscribed_to_id == user.id)).all()
+    subscribers = session.scalars(select(User).where(User.id.in_(subscriber_ids))).all()
+    return {"subscribers" : subscribers}
+
+
+@subscribe_router.get("/subscribtions/{user_id}")
+def get_user_subscribtions(user_id: str, session: Annotated[Session, Depends(get_session)]):
+    user = session.scalar(select(User).where(User.id == user_id))
+    if not user:
+        return Response("User not found", status_code=404)
+    subscribtion_ids = session.scalars(select(Subscribe.subscribed_to_id).where(Subscribe.subscriber_id == user.id)).all()
+    subscribtions = session.scalars(select(User).where(User.id.in_(subscribtion_ids))).all()
+    return {"subscribtions" : subscribtions}
