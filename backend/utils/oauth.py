@@ -2,7 +2,8 @@ from os import getenv
 from typing import Annotated
 from datetime import timedelta, datetime, timezone
 
-from sqlmodel import select, Session
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from dotenv import load_dotenv
