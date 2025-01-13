@@ -2,7 +2,8 @@ from .models import (
     Config,
     Comment,
     User,
-    Post
+    Post,
+    Subscribe
 )
 
 

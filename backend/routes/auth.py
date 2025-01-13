@@ -1,7 +1,7 @@
 from typing import Annotated
 from datetime import timedelta
 
-from sqlmodel import Session
+from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
