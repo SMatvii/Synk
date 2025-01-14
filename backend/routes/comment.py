@@ -41,10 +41,10 @@ def update_comment(
         raise HTTPException(
             status_code=404, detail=f"Comment with id {comment_id} not found"
         )
-    post_update = (
+    comment_update = (
         update(Comment).where(Comment.id == comment_id).values(**data.model_dump())
     )
-    session.execute(post_update)
+    session.execute(comment_update)
     session.commit()
     return {"detail": f"Comment with id {comment_id} updated successfully"}
 
