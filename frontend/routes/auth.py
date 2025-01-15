@@ -2,12 +2,13 @@ from os import getenv
 from requests import post
 from dotenv import load_dotenv
 from flask import render_template, redirect, url_for, request
-from .. import app
+from .. import app, BACKEND_URL
 from ..forms import RegisterForm, LoginForm
 
 
+
 load_dotenv()
-BACKEND_URL = getenv("BACKEND_URL")
+
 
 
 @app.get("/register")

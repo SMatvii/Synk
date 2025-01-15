@@ -1,9 +1,13 @@
 import os
 import asyncio
-from typing import List
+from typing import List, Annotated
 from dotenv import load_dotenv
 
-from fastapi import UploadFile, BackgroundTasks, HTTPException, APIRouter
+from fastapi import UploadFile, BackgroundTasks, HTTPException, APIRouter, Depends
+
+from ..db import User
+from ..utils import get_current_user
+
 
 load_dotenv()
 
@@ -16,6 +20,7 @@ os.makedirs(TMP_FOLDER, exist_ok=True)
 
 upload_router = APIRouter(prefix="/upload", tags=["Upload"])
 
+
 async def save_image(image: bytes, file_path: str):
     await asyncio.sleep(3)
     with open(file_path, "wb") as buffer:
@@ -23,7 +28,11 @@ async def save_image(image: bytes, file_path: str):
 
 
 @upload_router.post("/image")
-async def upload(images: List[UploadFile], background_tasks: BackgroundTasks):
+async def upload(
+    images: List[UploadFile],
+    background_tasks: BackgroundTasks,
+    current_user: Annotated[User, Depends(get_current_user)],
+):
     valid_files = [
         image
         for image in images
