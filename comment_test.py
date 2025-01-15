@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 from sqlalchemy import select
 
-from backend import app, Config, User, Post
+from backend import app, Config, User, Post, Comment
 
 Session = Config.SESSION
 
@@ -31,12 +31,22 @@ class TestCommentCRUD(IsolatedAsyncioTestCase):
             user = session.scalar(select(User).where(User.name==user_name))
             self.user_id = user.id
         
+        login_payload = { 
+            "username": "Test User", 
+            "password": "password123", 
+        } 
+ 
+        login_response = await self.client.post("auth/token", data=login_payload)
+        print(login_response.json())
+        self.token = login_response.json().get("access_token")
+
         post_payload = { 
             "title": "Test Post", 
             "content": "This is a test post.", 
             "user_id": self.user_id, 
         } 
-        post_response = await self.client.post("/posts/create", json=post_payload) 
+
+        post_response = await self.client.post("/posts/create", json=post_payload, headers={"authorization": f"Bearer {self.token}"}) #  headers={"authorization": f"Bearer {self.token}"}, to make requests to protected endpoints
         print("Post creation response:", post_response.json()) 
         self.assertEqual(post_response.status_code, 201) 
         post_title = post_response.json().get("title")
@@ -57,10 +67,13 @@ class TestCommentCRUD(IsolatedAsyncioTestCase):
             "post_id": self.post_id, 
             "user_id": self.user_id, 
         } 
-        print(self.user_id)
-        response = await self.client.post("/comments/create", json=payload) 
+        response = await self.client.post("/comments/create", json=payload, headers={"authorization": f"Bearer {self.token}"}) 
         self.assertEqual(response.status_code, 201)  
-        self.comment_id = response.json().get("id")
+        comment_content = response.json().get("content")
+        with Session() as session:
+            comment = session.scalar(select(Comment).where(Comment.content==comment_content))
+            self.comment_id = comment.id
+
 
 if __name__ == "__main__": 
     main()

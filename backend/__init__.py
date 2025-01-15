@@ -2,7 +2,7 @@ from fastapi import FastAPI
 
 
 from .routes import comment_router, auth_router, post_router, user_router, upload_router,subscribe_router
-from .db import migrate, Config, User, Post
+from .db import migrate, Config, User, Post, Comment
 
 
 app = FastAPI()
