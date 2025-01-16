@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select, update, delete
 
 from ..db import User, get_session, Post, Comment
-from ..schemas import UserModel, UserUpdate
+from ..schemas import UserModel
 from ..utils import get_current_user
 
 
@@ -35,7 +35,7 @@ def get_user(
 
 @user_router.put("/", status_code=status.HTTP_200_OK)
 def update_user( 
-    data: UserUpdate, 
+    data: UserModel, 
     session: Annotated[Session, Depends(get_session)],
     current_user: Annotated[User, Depends(get_current_user)]
 ):
