@@ -15,6 +15,7 @@ class Post(PKMixin, Base, PUBMixin):
 
     title: Mapped[str]
     content: Mapped[str]
+    file_path: Mapped[str]
 
     user: Mapped["User"] = relationship(back_populates="posts")
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))

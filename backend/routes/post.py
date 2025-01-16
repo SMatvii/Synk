@@ -1,8 +1,15 @@
+import os
 from typing import Annotated
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import (
+    APIRouter,
+    HTTPException,
+    Depends,
+    status,
+    UploadFile,
+    BackgroundTasks,
+)
 from sqlalchemy import select, update, delete
 from sqlalchemy.orm import Session
-
 
 from ..db import Post, User, get_session, Comment
 from ..schemas import PostModel
@@ -10,23 +17,57 @@ from ..utils import get_current_user
 
 post_router = APIRouter(prefix="/posts", tags=["Posts"])
 
+MAX_FILE_SIZE = 5 * 1024 * 1024
+TMP_FOLDER = "tmp"
+FORMATS = ["image/png", "image/gif", "image/jpeg", "image/jpg"]
+
+os.makedirs(TMP_FOLDER, exist_ok=True)
+
+
+async def save_image(image: bytes, file_path: str):
+    with open(file_path, "wb") as buffer:
+        buffer.write(image)
+
+
+@post_router.get("", status_code=status.HTTP_200_OK)
+def get_all_posts(session: Annotated[Session, Depends(get_session)]):
+    resp = []
+    posts = session.scalars(select(Post)).all()
+    for post in posts:
+        resp.append(post)
+
+    return resp
+
 
 @post_router.post("", status_code=status.HTTP_201_CREATED)
-def create_post(
-    data: PostModel,
+async def create_post(
+    title:str,
+    content:str,
     session: Annotated[Session, Depends(get_session)],
     current_user: Annotated[User, Depends(get_current_user)],
+    image: UploadFile,
+    background_tasks: BackgroundTasks,
 ):
-    post = Post(**data.model_dump())
+    if image.content_type not in FORMATS or image.size > MAX_FILE_SIZE:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Wrong format or too big file. The size shouldn't be more than 5mb",
+        )
+
+    folder = f"{TMP_FOLDER}/{title} photo"
+    os.makedirs(folder, exist_ok=True)
+    file_path = f"{folder}/{image.filename}"
+    background_tasks.add_task(
+        save_image, file_path=f"{folder}/{image.filename}", image=await image.read()
+    )
+    post = Post(title=title, content=content, file_path=file_path, user_id= current_user.id)
+
     session.add(post)
     return post
 
 
 @post_router.get("/{post_id}")
-def get_one_post(
-    post_id: int, 
-    session: Annotated[Session, Depends(get_session)]
-):
+def get_one_post(post_id: int, session: Annotated[Session, Depends(get_session)]):
     post = session.scalar(select(Post).where(Post.id == post_id))
     if not post:
         raise HTTPException(
@@ -37,10 +78,7 @@ def get_one_post(
 
 
 @post_router.get("/users/{user_id}")
-def get_users_posts(
-    user_id: int, 
-    session: Annotated[Session, Depends(get_session)]
-):
+def get_users_posts(user_id: int, session: Annotated[Session, Depends(get_session)]):
     resp = []
     user = session.scalar(select(User).where(User.id == user_id))
     if not user:
