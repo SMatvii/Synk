@@ -11,7 +11,7 @@ from ..utils import get_current_user
 post_router = APIRouter(prefix="/posts", tags=["Posts"])
 
 
-@post_router.post("/create", status_code=status.HTTP_201_CREATED)
+@post_router.post("", status_code=status.HTTP_201_CREATED)
 def create_post(
     data: PostModel,
     session: Annotated[Session, Depends(get_session)],

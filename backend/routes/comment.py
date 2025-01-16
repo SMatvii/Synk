@@ -12,7 +12,7 @@ from ..utils import get_current_user
 comment_router = APIRouter(prefix="/comments", tags=["Comments"])
 
 
-@comment_router.post("/create", status_code=status.HTTP_201_CREATED)
+@comment_router.post("", status_code=status.HTTP_201_CREATED)
 def create_comment(
     data: CommentModel, 
     session: Annotated[Session, Depends(get_session)],
