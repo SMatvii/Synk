@@ -5,7 +5,7 @@
   <div class="card mb-3" style="max-width: 200000;">
     <div class="row g-0">
       <div class="col-md-4">
-        <img src={{post.file_path}} class="img-fluid rounded-start" alt="...">
+        <img src="{{post.file_path}}" class="img-fluid rounded-start" alt="">
       </div>
       <div class="col-md-8">
         <div class="card-body">
@@ -27,6 +27,12 @@
     </div>
   </form>  
 
+  
+    
+
+    
+  
+  {% if comments %}
   {% for comment in comments %}
   <div class="card mb-3" style="max-width: 540px;">
     <div class="row g-0">
@@ -40,5 +46,8 @@
       </div>
     </div>
   </div>
+  {% else %}
+  
   {% endfor %}
+  {% endif %}
 {% endblock %}
