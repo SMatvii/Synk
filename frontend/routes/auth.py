@@ -2,7 +2,7 @@ from os import getenv
 from requests import post
 from dotenv import load_dotenv
 from flask import render_template, redirect, url_for, request
-from .. import app, BACKEND_URL
+from .. import flask_app, BACKEND_URL
 from ..forms import RegisterForm, LoginForm
 
 
@@ -11,13 +11,14 @@ load_dotenv()
 
 
 
-@app.get("/register")
+@flask_app.get("/register")
 def register():
     form = RegisterForm()
+    form.title="Register"
     return render_template("auth.html", form=form)
 
 
-@app.post("/register")
+@flask_app.post("/register")
 def register_post():
     form = RegisterForm()
     data = {
@@ -31,17 +32,25 @@ def register_post():
         return redirect(url_for("login"))
 
 
-@app.get("/login")
+@flask_app.get("/login")
 def login():
     form = LoginForm()
     form.title = "Login"
     return render_template("auth.html", form=form)
 
 
-@app.post("/login")
+@flask_app.post("/login")
 def login_post():
     form = LoginForm()
     data = {"username": form.name.data, "password": form.password.data}
     resp = post(f"{BACKEND_URL}/auth/token", data=data)
     if resp.ok:
-        return redirect(url_for("index"))
+        response = redirect(url_for("index"))
+        response.set_cookie("token", resp.json().get("access_token"))
+        return response 
+    
+
+@flask_app.get("/token")
+def get_token():
+    token = request.cookies.get("token")
+    return "<h1>Your access token: " + token + "</h1>"

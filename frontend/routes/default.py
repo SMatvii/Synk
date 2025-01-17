@@ -1,7 +1,7 @@
 from flask import render_template
-from .. import app
+from .. import flask_app
 
 
-@app.get("/")
+@flask_app.get("/")
 def index():
     return render_template("base.html")
