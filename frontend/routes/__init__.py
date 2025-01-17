@@ -1,5 +1,6 @@
 from . import (
     default,
     auth,
-    user
+    user, 
+    post
 )
