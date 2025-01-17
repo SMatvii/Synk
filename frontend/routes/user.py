@@ -1,6 +1,6 @@
 from requests import get
-from .. import flask_app, BACKEND_URL
 from flask import render_template
+from .. import flask_app, BACKEND_URL
 
 
 @flask_app.get("/users/<int:id>")

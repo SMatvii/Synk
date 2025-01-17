@@ -11,4 +11,6 @@
 <button>Subscribe</button>
 <button>Unsubscribe</button>
 
+<a href="{{ url_for('create_post_page', id=user.id) }}" class="btn btn-secondary">Create Post</a>
+
 {% endblock %}
