@@ -25,7 +25,7 @@ def register_post():
         "name": form.name.data,
         "email": form.email.data,
         "password": form.password.data,
-        "bio": "",
+        "bio": form.bio.data,
     }
     resp = post(f"{BACKEND_URL}/users/registrate", json=data)
     if resp.status_code == 201:

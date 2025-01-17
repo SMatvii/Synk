@@ -1,4 +1,5 @@
 from . import (
     default,
-    auth
+    auth,
+    user
 )
