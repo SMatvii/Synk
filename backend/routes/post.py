@@ -48,11 +48,12 @@ async def create_post(
     image: UploadFile,
     background_tasks: BackgroundTasks,
 ):
-    if image.content_type not in FORMATS or image.size > MAX_FILE_SIZE:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Wrong format or too big file. The size shouldn't be more than 5mb",
-        )
+    
+    # if image.content_type not in FORMATS:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_400_BAD_REQUEST,
+    #         detail="Wrong format or too big file. The size shouldn't be more than 5mb",
+    #     )
 
     folder = f"{TMP_FOLDER}/{title} photo"
     os.makedirs(folder, exist_ok=True)

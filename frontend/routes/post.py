@@ -34,7 +34,7 @@ def create_post():
         response = requests.post(
             f"{BACKEND_URL}/posts",
             headers=headers,
-            data={"title": title, "content": content},
+            params={"title": title, "content": content,},
             files=files,
         )
 
@@ -48,3 +48,25 @@ def create_post():
     else:
         flash("Form validation failed. Please try again.", "danger")
         return redirect(url_for("create_post_page"))
+
+
+@flask_app.get("/posts/<int:id>")
+def see_one_post(id):
+    post = requests.get(f"{BACKEND_URL}/posts/{id}")
+    if post:
+        user_id = post.json().get("user_id")
+        user = requests.get(f"{BACKEND_URL}/users/{user_id}")
+        comments = requests.get(f"{BACKEND_URL}/comments/{id}")
+        if comments.status_code == 200: 
+            return render_template(
+                "one_post.html", 
+                post=post.json(), 
+                user=user.json(),
+                comments=comments.json()
+                )
+        else:
+            return render_template(
+                "one_post.html", 
+                post=post.json(), 
+                user=user.json(),
+            )
