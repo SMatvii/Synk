@@ -53,6 +53,7 @@ def create_post():
 @flask_app.get("/posts/<int:id>")
 def see_one_post(id):
     post = requests.get(f"{BACKEND_URL}/posts/{id}")
+    token = request.cookies.get("token")
     if post:
         user_id = post.json().get("user_id")
         user = requests.get(f"{BACKEND_URL}/users/{user_id}")
@@ -62,11 +63,15 @@ def see_one_post(id):
                 "one_post.html", 
                 post=post.json(), 
                 user=user.json(),
+                url=BACKEND_URL,
+                token=token,
                 comments=comments.json()
                 )
         else:
             return render_template(
                 "one_post.html", 
                 post=post.json(), 
+                url=BACKEND_URL,
+                token=token,
                 user=user.json(),
             )

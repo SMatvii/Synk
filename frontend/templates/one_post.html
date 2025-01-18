@@ -22,8 +22,8 @@
   <form>
     <div class="mb-3">
       <label for="writecomment" class="form-label">Write comment</label>
-      <input type="text" class="form-control" id="writecomment" aria-describedby="comment ...">
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <input type="text" class="form-control" id="comment" aria-describedby="comment ...">
+      <button onclick="createComment()">Submit</button>
     </div>
   </form>  
   
@@ -45,4 +45,40 @@
   
   {% endfor %}
   {% endif %}
+  <script>
+    const api_url = `${url}/comments`;
+    const comment = document.getElementById("comment");
+  
+    function createComment(event) {
+        const data = {
+            content: comment,
+            post_id: `${post.id}`,
+          };
+          
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+              'Authorization': `${token}`,
+            },
+            body: JSON.stringify(data),
+          };
+          
+        fetch(apiUrl, requestOptions)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(data => {
+              outputElement.textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+              console.error
+          
+        ('Error:', error);
+          
+            });
+    }
+    </script>
 {% endblock %}
