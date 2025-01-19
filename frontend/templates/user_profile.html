@@ -13,4 +13,30 @@
 
 <a href="{{ url_for('create_post_page') }}" class="btn btn-secondary">Create Post</a>
 
+    
+{% if posts %}
+<div class="container">
+    <h1>Posts</h1>
+    {% for post in posts %}
+    <a href="/posts/{{post.id}}"class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{{ post.file_path }}" class="img-fluid rounded-start" alt="Image for {{ post.title }}">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.content }}</p>
+                    <p class="card-text">
+                        <small class="text-body-secondary">
+                            Posted on {{ post.pub_date }}
+                        </small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
 {% endblock %}

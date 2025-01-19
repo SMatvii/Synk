@@ -1,4 +1,4 @@
-import requests
+from requests import get, post
 from flask import render_template, redirect, flash, url_for, request
 from .. import flask_app, BACKEND_URL
 from ..forms import PostForm
@@ -31,10 +31,13 @@ def create_post():
         if image:
             files["image"] = image
 
-        response = requests.post(
+        response = post(
             f"{BACKEND_URL}/posts",
             headers=headers,
-            params={"title": title, "content": content,},
+            params={
+                "title": title,
+                "content": content,
+            },
             files=files,
         )
 
@@ -52,26 +55,29 @@ def create_post():
 
 @flask_app.get("/posts/<int:id>")
 def see_one_post(id):
-    post = requests.get(f"{BACKEND_URL}/posts/{id}")
+    post = get(f"{BACKEND_URL}/posts/{id}")
     token = request.cookies.get("token")
     if post:
         user_id = post.json().get("user_id")
-        user = requests.get(f"{BACKEND_URL}/users/{user_id}")
-        comments = requests.get(f"{BACKEND_URL}/comments/{id}")
-        if comments.status_code == 200: 
+        user = get(f"{BACKEND_URL}/users/{user_id}")
+        comments = get(f"{BACKEND_URL}/comments/{id}")
+        if comments.status_code == 200:
             return render_template(
-                "one_post.html", 
-                post=post.json(), 
+                "one_post.html",
+                post=post.json(),
                 user=user.json(),
                 url=BACKEND_URL,
                 token=token,
-                comments=comments.json()
-                )
+                comments=comments.json(),
+            )
         else:
             return render_template(
-                "one_post.html", 
-                post=post.json(), 
+                "one_post.html",
+                post=post.json(),
                 url=BACKEND_URL,
                 token=token,
                 user=user.json(),
             )
+    else:
+        flash(f"No post with this id: {id}. Create some first.", "danger")
+        return redirect(url_for("create_post_page"))
