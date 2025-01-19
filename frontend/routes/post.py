@@ -81,3 +81,4 @@ def see_one_post(id):
     else:
         flash(f"No post with this id: {id}. Create some first.", "danger")
         return redirect(url_for("create_post_page"))
+
