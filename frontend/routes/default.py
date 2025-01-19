@@ -7,5 +7,4 @@ from .. import flask_app, BACKEND_URL
 def index():
 
     resp = requests.get(f"{BACKEND_URL}/posts")
-    if resp.status_code == 200:
-        return render_template("card.html", posts=resp.json())
+    return render_template("card.html", posts=resp.json())
