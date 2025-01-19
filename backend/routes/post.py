@@ -126,7 +126,7 @@ def update_post(
     return {"detail": f"Post with id {post_id} updated successfully"}
 
 
-@post_router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
+@post_router.delete("/{post_id}", )
 def delete_post(
     post_id: int,
     session: Annotated[Session, Depends(get_session)],
