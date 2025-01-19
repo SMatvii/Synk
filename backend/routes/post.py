@@ -114,7 +114,7 @@ def update_post(
             detail=f"Post with id {post_id} not found",
         )
 
-    if post.id != current_user.id:
+    if post.user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=f"You are not creator of this post",
@@ -139,7 +139,7 @@ def delete_post(
             detail=f"Post with id {post_id} not found",
         )
 
-    if post.id != current_user.id:
+    if post.user_id != current_user.id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=f"You are not creator of this post",
