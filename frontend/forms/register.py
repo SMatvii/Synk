@@ -32,4 +32,3 @@ class RegisterForm(FlaskForm):
     password_confirm = PasswordField(validators=[DataRequired(), EqualTo("password")])
     bio = StringField()
     submit = SubmitField("Register")
-
