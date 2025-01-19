@@ -1,4 +1,4 @@
-from requests import get, post, put
+from requests import get, post, put, delete
 from flask import render_template, redirect, flash, url_for, request
 from .. import flask_app, BACKEND_URL
 from ..forms import PostForm, EditPostForm
@@ -127,3 +127,26 @@ def edit_post(id):
     else:
         flash("Form validation failed. Please try again.", "danger")
         return redirect(url_for("edit_post_page", id=id))
+
+
+@flask_app.post("/posts/delete/<int:id>")
+def delete_post(id):
+    
+    token = request.cookies.get("token")
+
+    if not token:
+        flash("You need to log in to delete a post!", "danger")
+        return redirect(url_for("login"))
+
+    headers = {"Authorization": f"Bearer {token}"}
+
+    response = delete(
+        f"{BACKEND_URL}/posts/{id}",
+        headers=headers,
+    )
+
+    if response.status_code == 204:
+        flash("Post deleted successfully!", "success")
+    else:
+        flash(f"Error deleting post: {response.json()}", "danger")
+    return redirect(url_for("index"))
