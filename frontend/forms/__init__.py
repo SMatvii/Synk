@@ -1,3 +1,3 @@
 from .register import RegisterForm
 from .login import LoginForm
-from .post import PostForm
+from .post import PostForm, EditPostForm

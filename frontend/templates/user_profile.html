@@ -25,7 +25,7 @@
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <a href="/posts/{{post.id}}" class="card-title">{{ post.title }}</a>
+                    <a href="{{ url_for('see_one_post', id=post.id) }}" class="card-title">{{ post.title }}</a>
                     <p class="card-text">{{ post.content }}</p>
                     <p class="card-text">
                         <small class="text-body-secondary">

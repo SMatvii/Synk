@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Create a Post</h1>
+<h1>{{action}} a Post</h1>
 
-<form method="POST" enctype="multipart/form-data">
+<form method="{{method}}" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     
     <div class="mb-3">
@@ -11,17 +11,20 @@
         {{ form.title(class="form-control") }}
     </div>
 
+    
     <div class="mb-3">
         <label for="content" class="form-label">Content</label>
         {{ form.content(class="form-control") }}
     </div>
 
+    {% if form.image %}
     <div class="mb-3">
         <label for="image" class="form-label">Upload Image</label>
         {{ form.image(class="form-control") }}
     </div>
-
-    <button type="submit" class="btn btn-primary">Create Post</button>
+    {% else %}
+    {% endif %}
+    <button type="submit" class="btn btn-primary">{{action}} Post</button>
 </form>
 
 {% endblock %}
