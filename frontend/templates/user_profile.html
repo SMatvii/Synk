@@ -12,6 +12,7 @@
 <button>Unsubscribe</button>
 
 <a href="{{ url_for('create_post_page') }}" class="btn btn-secondary">Create Post</a>
+<a href="{{ url_for('edit_user_page', id=user.id) }}" class="btn btn-primary">Edit Profile</a>
 
     
 {% if posts %}
