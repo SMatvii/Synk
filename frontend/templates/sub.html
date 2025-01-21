@@ -2,8 +2,12 @@
 
 
 {% block content %}
-    <h1>{{title}}</h1>
-    {% for user in users %}
-        <a href="{{url_for('get_user', id=user.id)}}">{{user.name}}</a>
-    {% endfor %}
+    <h1>{{ title }}</h1>
+    {% if users %}
+        {% for user in users %} 
+            <a href="{{ url_for('get_user', id=user.id) }}">{{ user.name }}</a>
+        {% endfor %}
+    {% else %}
+        <p>No users found.</p>
+    {% endif %}
 {% endblock %}

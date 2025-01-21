@@ -7,8 +7,8 @@
 
 
 <a href="{{ url_for('get_subscribers', id=user.id) }}">Subscribers</a>
-<a href="#">Subscriptions</a>
-<button>Subscribe</button>
+<a href="{{ url_for('get_subscriptions', id=user.id) }}">Subscriptions</a>
+<a href="{{ url_for('subscribe', id=user.id) }}" class="btn btn-primary">Subscribe</a>
 <a href="{{ url_for('unsubscribe', id=user.id) }}" class="btn btn-danger">Unsubscribe</a>
 
 <a href="{{ url_for('create_post_page') }}" class="btn btn-secondary">Create Post</a>
