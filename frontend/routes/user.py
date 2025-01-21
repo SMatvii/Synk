@@ -47,9 +47,10 @@ def edit_user(id):
         headers = {"Authorization": f"Bearer {token}"}
 
         response = put(
-            f"{BACKEND_URL}/users/{id}",
+            f"{BACKEND_URL}/users",
             headers=headers,
-            params={"name": name, "bio": bio},
+            json={"name": name,
+                  "bio": bio,},
         )
 
         if response.status_code == 200:

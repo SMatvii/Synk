@@ -8,12 +8,15 @@ from .hash import get_password_hash
 Session = Config.SESSION
         
 
-class UserModel(BaseModel):
+class EditUserModel(BaseModel):
     name: str = Field(..., description="Username")
-    email: EmailStr = Field(..., description="User email")
-    password: str = Field(..., min_length=6, description="User password")
     bio: str = Field(default_factory="",description="User bio",max_length=50)
 
+
+class UserModel(EditUserModel):
+    email: EmailStr = Field(..., description="User email")
+    password: str = Field(..., min_length=6, description="User password")
+    
     @field_validator("email")
     @classmethod
     def check_email(cls, v):
@@ -36,7 +39,6 @@ class UserModel(BaseModel):
                 )
             return v
         
-    
     @field_validator("password")
     @classmethod
     def hash_psw(cls, v):

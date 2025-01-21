@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select, update, delete
 
 from ..db import User, get_session, Post, Comment
-from ..schemas import UserModel
+from ..schemas import EditUserModel, UserModel
 from ..utils import get_current_user
 
 
@@ -35,14 +35,14 @@ def get_user(
 
 @user_router.put("/", status_code=status.HTTP_200_OK)
 def update_user( 
-    data: UserModel, 
+    data: EditUserModel, 
     session: Annotated[Session, Depends(get_session)],
     current_user: Annotated[User, Depends(get_current_user)]
 ):
     user_update = update(User).where(User.id == current_user.id).values(**data.model_dump())
     session.execute(user_update)
     session.commit()
-    return {"detail": f"User with id {current_user.id} updated successfully"}
+    return {"detail": f"User updated successfully"}
 
 
 @user_router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
