@@ -6,10 +6,10 @@
 <h2>{{user.bio}}</h2>
 
 
-<a href="#">Subscribers</a>
+<a href="{{ url_for('get_subscribers', id=user.id) }}">Subscribers</a>
 <a href="#">Subscriptions</a>
 <button>Subscribe</button>
-<button>Unsubscribe</button>
+<a href="{{ url_for('unsubscribe', id=user.id) }}" class="btn btn-danger">Unsubscribe</a>
 
 <a href="{{ url_for('create_post_page') }}" class="btn btn-secondary">Create Post</a>
 <a href="{{ url_for('edit_user_page', id=user.id) }}" class="btn btn-primary">Edit Profile</a>

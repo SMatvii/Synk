@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <h1>{{title}}</h1>
+    {% for user in users %}
+        <a href="{{url_for('get_user', id=user.id)}}">{{user.name}}</a>
+    {% endfor %}
+{% endblock %}

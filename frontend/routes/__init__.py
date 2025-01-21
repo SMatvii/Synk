@@ -2,5 +2,6 @@ from . import (
     default,
     auth,
     user,
-    post
+    post, 
+    subscribe
 )

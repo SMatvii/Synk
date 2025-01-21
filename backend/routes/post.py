@@ -55,7 +55,7 @@ async def create_post(
     #         detail="Wrong format or too big file. The size shouldn't be more than 5mb",
     #     )
 
-    folder = f"{TMP_FOLDER}/{title} photo"
+    folder = f"{TMP_FOLDER}/{title}_photo"
     os.makedirs(folder, exist_ok=True)
     file_path = f"{folder}/{image.filename}"
     background_tasks.add_task(
