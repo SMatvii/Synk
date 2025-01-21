@@ -64,3 +64,11 @@ def delete_user(
 
     session.commit()
     return {"detail": f"User with id {current_user.id} deleted successfully"}
+
+
+
+@user_router.get("/current_user")
+def get_currentuser(current_user: Annotated[User, Depends(get_current_user)],):
+    return current_user
+
+ 
