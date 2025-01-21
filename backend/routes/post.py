@@ -41,14 +41,14 @@ def get_all_posts(session: Annotated[Session, Depends(get_session)]):
 
 @post_router.post("", status_code=status.HTTP_201_CREATED)
 async def create_post(
-    title:str,
-    content:str,
+    title: str,
+    content: str,
     session: Annotated[Session, Depends(get_session)],
     current_user: Annotated[User, Depends(get_current_user)],
     image: UploadFile,
     background_tasks: BackgroundTasks,
 ):
-    
+
     # if image.content_type not in FORMATS:
     #     raise HTTPException(
     #         status_code=status.HTTP_400_BAD_REQUEST,
@@ -61,7 +61,9 @@ async def create_post(
     background_tasks.add_task(
         save_image, file_path=f"{folder}/{image.filename}", image=await image.read()
     )
-    post = Post(title=title, content=content, file_path=file_path, user_id= current_user.id)
+    post = Post(
+        title=title, content=content, file_path=file_path, user_id=current_user.id
+    )
 
     session.add(post)
     return post

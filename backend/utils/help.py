@@ -21,6 +21,6 @@ def is_already_subscribed(session, subscriber_id, subscribed_to_id):
     return session.scalar(
         select(Subscribe).where(
             Subscribe.subscriber_id == subscriber_id,
-            Subscribe.subscribed_to_id == subscribed_to_id
+            Subscribe.subscribed_to_id == subscribed_to_id,
         )
     )

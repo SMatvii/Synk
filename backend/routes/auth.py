@@ -14,10 +14,7 @@ from ..utils import (
 )
 
 
-
-auth_router = APIRouter(
-    prefix="/auth", tags=["Auth"]
-)
+auth_router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 @auth_router.post("/token")

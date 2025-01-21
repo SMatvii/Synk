@@ -49,8 +49,10 @@ def edit_user(id):
         response = put(
             f"{BACKEND_URL}/users",
             headers=headers,
-            json={"name": name,
-                  "bio": bio,},
+            json={
+                "name": name,
+                "bio": bio,
+            },
         )
 
         if response.status_code == 200:

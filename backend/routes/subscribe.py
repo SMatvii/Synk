@@ -20,8 +20,10 @@ def subscribe(
     user_to_subscribe = find_user_by_id(session, subscribe_to_id)
 
     if not user_to_subscribe:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id {subscribe_to_id} not found")
-
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with id {subscribe_to_id} not found",
+        )
 
     if is_already_subscribed(session, current_user.id, subscribe_to_id):
         return "You are already subscribed to this user"
@@ -46,7 +48,10 @@ def unsubscribe(
     user_to_unsubscribe = find_user_by_id(session, user_id)
 
     if not user_to_unsubscribe:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id {user_id} not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with id {user_id} not found",
+        )
 
     subscription = is_already_subscribed(session, current_user.id, user_id)
     if not subscription:
@@ -61,14 +66,18 @@ def unsubscribe(
 
 @subscribe_router.get("/subscribers/{user_id}")
 def get_user_subscribers(
-    user_id: str, 
-    session: Annotated[Session, Depends(get_session)]
+    user_id: str, session: Annotated[Session, Depends(get_session)]
 ):
     resp = []
     user = session.scalar(select(User).where(User.id == user_id))
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id {user_id} not found")
-    subscriber_ids = session.scalars(select(Subscribe.subscriber_id).where(Subscribe.subscribed_to_id == user.id)).all()
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with id {user_id} not found",
+        )
+    subscriber_ids = session.scalars(
+        select(Subscribe.subscriber_id).where(Subscribe.subscribed_to_id == user.id)
+    ).all()
 
     for id in subscriber_ids:
         subscriber = session.scalar(select(User).where(User.id == id))
@@ -79,14 +88,18 @@ def get_user_subscribers(
 
 @subscribe_router.get("/subscribtions/{user_id}")
 def get_user_subscribtions(
-    user_id: str, 
-    session: Annotated[Session, Depends(get_session)]
+    user_id: str, session: Annotated[Session, Depends(get_session)]
 ):
     resp = []
     user = session.scalar(select(User).where(User.id == user_id))
     if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"User with id {user_id} not found")
-    subscribtion_ids = session.scalars(select(Subscribe.subscribed_to_id).where(Subscribe.subscriber_id == user.id)).all()
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with id {user_id} not found",
+        )
+    subscribtion_ids = session.scalars(
+        select(Subscribe.subscribed_to_id).where(Subscribe.subscriber_id == user.id)
+    ).all()
     for id in subscribtion_ids:
         subscribtion = session.scalar(select(User).where(User.id == id))
         if subscribtion:

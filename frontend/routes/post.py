@@ -131,7 +131,7 @@ def edit_post(id):
 
 @flask_app.post("/posts/delete/<int:id>")
 def delete_post(id):
-    
+
     token = request.cookies.get("token")
 
     if not token:

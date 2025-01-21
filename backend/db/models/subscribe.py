@@ -7,7 +7,7 @@ from .mixins import PKMixin
 Base = Config.BASE
 
 
-class Subscribe(PKMixin,Base):
+class Subscribe(PKMixin, Base):
     __tablename__ = "subscriptions"
 
     subscriber_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
