@@ -58,11 +58,11 @@ def get_subscribers(id):
 
 @flask_app.get("/users/<int:id>/subscriptions")
 def get_subscriptions(id):
-    resp = get(f"{BACKEND_URL}/sub/subscriptions/{id}")
+    resp = get(f"{BACKEND_URL}/sub/subscribtions/{id}")
 
     if resp.status_code == 200:
         return render_template(
-            "sub.html", title="Subscriptions", users=resp.json().get("subscriptions")
+            "sub.html", title="Subscriptions", users=resp.json().get("subscribtions")
         )
     else:
         flash(f"Error: {resp.json()}!")
