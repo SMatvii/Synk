@@ -49,7 +49,7 @@ def login():
 def login_post():
     form = LoginForm()
     if form.validate_on_submit():
-        data = {"username": form.name.data, "password": form.password.data}
+        data = {"username": form.email.data, "password": form.password.data}
         resp = post(f"{BACKEND_URL}/auth/token", data=data)
         if resp.ok:
             response = redirect(url_for("index"))

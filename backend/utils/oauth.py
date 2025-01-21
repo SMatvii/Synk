@@ -24,13 +24,13 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
 def authenticate_user(
-    username: str,
+    email: str,
     password: str,
     session: Annotated[Session, Depends(get_session)],
 ):
-    user = session.scalar(select(User).where(User.name == username))
+    user = session.scalar(select(User).where(User.email == email))
     if not user:
-        raise HTTPException(status_code=404, detail="No user with this name")
+        raise HTTPException(status_code=404, detail="No user with this email")
     if not verify_password(password, user.password):
         raise HTTPException(status_code=400, detail="Wrong password")
     return user
@@ -58,13 +58,13 @@ def get_current_user(
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        email: str = payload.get("sub")
+        if email is None:
             raise credentials_exception
-        token_data = Token(username=username)
+        token_data = Token(email=email)
     except InvalidTokenError:
         raise credentials_exception
-    user = session.scalar(select(User).where(User.name == token_data.username))
+    user = session.scalar(select(User).where(User.email == token_data.email))
     if user is None:
         raise credentials_exception
     return user
