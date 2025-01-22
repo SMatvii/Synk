@@ -1,7 +1,7 @@
 from requests import get, post, put, delete
 from flask import render_template, redirect, flash, url_for, request
 from .. import flask_app, BACKEND_URL
-from ..forms import PostForm, EditPostForm
+from ..forms import PostForm, EditPostForm, CommentForm
 
 
 @flask_app.get("/posts/create")
@@ -58,6 +58,7 @@ def see_one_post(id):
     post = get(f"{BACKEND_URL}/posts/{id}")
     token = request.cookies.get("token")
     if post:
+        form = CommentForm()
         user_id = post.json().get("user_id")
         user = get(f"{BACKEND_URL}/users/{user_id}")
         comments = get(f"{BACKEND_URL}/comments/{id}")
@@ -69,6 +70,7 @@ def see_one_post(id):
                 url=BACKEND_URL,
                 token=token,
                 comments=comments.json(),
+                form=form
             )
         else:
             return render_template(
@@ -77,10 +79,33 @@ def see_one_post(id):
                 url=BACKEND_URL,
                 token=token,
                 user=user.json(),
+                form=form
             )
     else:
         flash(f"No post with this id: {id}. Create some first.", "danger")
         return redirect(url_for("create_post_page"))
+
+
+@flask_app.post("/posts/<int:id>")
+def see_post(id):
+    form = CommentForm()
+    content = form.content.data
+    token = request.cookies.get("token")
+
+    if not token:
+        flash("You need to log in to create a comment!", "danger")
+        return redirect(url_for("login"))
+
+    data = {"content": content, "post_id": id}
+
+    headers = {"Authorization": f"Bearer {token}"}
+    resp = post(f"{BACKEND_URL}/comments", json=data, headers=headers)
+    if resp.status_code == 201:
+        flash("Comment created!")
+        return redirect(url_for("see_one_post", id=id))
+    else:
+        flash(f"Error:{resp.json()}")
+        return redirect(url_for("see_one_post", id=id))
 
 
 @flask_app.get("/posts/edit/<int:id>")

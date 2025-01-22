@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "helpers.html" as helpers %}
 
 {% block content %}
 <div class="card mb-3" style="max-width: 200000;">
@@ -26,16 +27,12 @@
 </div>
 
 
-<form id="comment-form" data-post-id="{{ post.id }}">
-    <div class="mb-3">
-        <label for="comment" class="form-label">Write comment</label>
-        <input type="text" class="form-control" id="comment" aria-describedby="comment-help" required>
-        <button type="submit" class="btn btn-primary mt-2">Submit</button>
-    </div>
-</form>
+<div class="container mt-5">
+    {{helpers.render_form(form)}}
+</div>
 
 {% if comments %}
-<div id="comment-list">
+<div id="comment-list", class="container mt-5">
     {% for comment in comments %}
     <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
