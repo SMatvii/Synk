@@ -68,7 +68,7 @@ def see_one_post(id):
                 user=user.json(),
                 url=BACKEND_URL,
                 comments=comments.json(),
-                form=form
+                form=form,
             )
         else:
             return render_template(
@@ -76,7 +76,7 @@ def see_one_post(id):
                 post=post.json(),
                 url=BACKEND_URL,
                 user=user.json(),
-                form=form
+                form=form,
             )
     else:
         flash(f"No post with this id: {id}. Create some first.", "danger")

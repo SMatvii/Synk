@@ -20,30 +20,27 @@
                   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                   <button type="submit" class="btn btn-danger">Delete</button>
               </form>
-
             </div>
         </div>
     </div>
 </div>
-
 
 <div class="container mt-5">
     {{helpers.render_form(form)}}
 </div>
 
 {% if comments %}
-<div id="comment-list", class="container mt-5">
+<div id="comment-list" class="container mt-5">
     {% for comment in comments %}
     <div class="card mb-3" style="max-width: 540px;">
-        <div class="row g-0">
-            <div class="col-md-8">
-                <div class="card-body">
-                    <p class="card-text">{{ comment.content }}</p>
-                    <a href="{{ url_for('get_user', id=comment.user_id) }}" class="btn btn-primary">Author</a>
-                    <a href="#" class="btn btn-primary">Edit</a>
-                    <a href="#" class="btn btn-primary">Delete</a>
-                </div>
-            </div>
+        <div class="card-body">
+            <p class="card-text">{{ comment.content }}</p>
+            <a href="{{ url_for('get_user', id=comment.user_id) }}" class="btn btn-primary">Author</a>
+            <a href="{{ url_for('edit_comment_page', id=comment.id) }}" class="btn btn-warning">Edit</a>
+            <form action="{{ url_for('delete_comment', id=comment.id) }}" method="post" style="display: inline;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+            </form>
         </div>
     </div>
     {% endfor %}
