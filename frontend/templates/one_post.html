@@ -54,8 +54,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-    const BACKEND_URL = "{{ url }}";
-</script>
-<script src="{{ url_for('static', filename='js/comment.js') }}"></script>
+<script src="{{ url_for('static', filename='js/post_delete.js') }}"></script>
 {% endblock %}

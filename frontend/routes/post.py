@@ -56,7 +56,6 @@ def create_post():
 @flask_app.get("/posts/<int:id>")
 def see_one_post(id):
     post = get(f"{BACKEND_URL}/posts/{id}")
-    token = request.cookies.get("token")
     if post:
         form = CommentForm()
         user_id = post.json().get("user_id")
@@ -68,7 +67,6 @@ def see_one_post(id):
                 post=post.json(),
                 user=user.json(),
                 url=BACKEND_URL,
-                token=token,
                 comments=comments.json(),
                 form=form
             )
@@ -77,7 +75,6 @@ def see_one_post(id):
                 "one_post.html",
                 post=post.json(),
                 url=BACKEND_URL,
-                token=token,
                 user=user.json(),
                 form=form
             )
