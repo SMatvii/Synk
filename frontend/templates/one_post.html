@@ -2,6 +2,7 @@
 {% import "helpers.html" as helpers %}
 
 {% block content %}
+<div class="container mt-5">
 <div class="card mb-3" style="max-width: 200000;">
     <div class="row g-0">
         <div class="col-md-4">
@@ -25,13 +26,14 @@
         </div>
     </div>
 </div>
-
+</div>
 
 <div class="container mt-5">
     {{helpers.render_form(form)}}
 </div>
 
 {% if comments %}
+<h2>Comments</h2>
 <div id="comment-list", class="container mt-5">
     {% for comment in comments %}
     <div class="card mb-3" style="max-width: 540px;">
@@ -49,7 +51,7 @@
     {% endfor %}
 </div>
 {% else %}
-<p>No comments yet. Be the first to comment!</p>
+<center>No comments yet. Be the first to comment!</center>
 {% endif %}
 {% endblock %}
 

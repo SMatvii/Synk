@@ -12,20 +12,23 @@
     <link rel="stylesheet" href="/static/css/auth.css">
 </head>
 <body>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
+    
 
     {% block nav %}
     {% include 'includes/nav.html' %}
     {% endblock %}
 
+    <div class="container mt-5">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    </div>
     
     {% block content %}
 

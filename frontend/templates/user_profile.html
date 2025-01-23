@@ -2,22 +2,22 @@
 
 
 {% block content %}
-<h1>Nickname:{{user.name}}</h1>
+<h2>Nickname:{{user.name}}</h2>
 <h2>{{user.bio}}</h2>
 
-
-<a href="{{ url_for('get_subscribers', id=user.id) }}">Subscribers</a>
-<a href="{{ url_for('get_subscriptions', id=user.id) }}">Subscriptions</a>
-<a href="{{ url_for('subscribe', id=user.id) }}" class="btn btn-primary">Subscribe</a>
+<div class="container mt-5">
+<a href="{{ url_for('get_subscribers', id=user.id) }}" class="btn btn-info">Subscribers</a>
+<a href="{{ url_for('get_subscriptions', id=user.id) }}" class="btn btn-primary">Subscriptions</a>
+<a href="{{ url_for('subscribe', id=user.id) }}" class="btn btn-success">Subscribe</a>
 <a href="{{ url_for('unsubscribe', id=user.id) }}" class="btn btn-danger">Unsubscribe</a>
 
-<a href="{{ url_for('create_post_page') }}" class="btn btn-secondary">Create Post</a>
-<a href="{{ url_for('edit_user_page', id=user.id) }}" class="btn btn-primary">Edit Profile</a>
-
+<a href="{{ url_for('edit_user_page', id=user.id) }}" class="btn btn-warning">Edit Profile</a>
+<a href="{{ url_for('delete_user_posts', id=user.id) }}" class="btn btn-danger">Delete all posts</a>
+</div>
     
 {% if posts %}
 <div class="container">
-    <h1>Posts</h1>
+    <h2>Posts</h2>
     {% for post in posts %}
     <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">

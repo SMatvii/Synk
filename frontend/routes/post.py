@@ -172,3 +172,21 @@ def delete_post(id):
     else:
         flash(f"Error deleting post: {response.json()}", "danger")
     return redirect(url_for("index"))
+
+
+@flask_app.get("/posts/users/delete/<int:id>")
+def delete_user_posts(id):
+    token = request.cookies.get("token")
+    if not token:
+        flash("You need to log in to delete posts!", "danger")
+        return redirect(url_for("login"))
+    
+    headers = {"Authorization": f"Bearer {token}"}
+
+    resp = delete(f"{BACKEND_URL}/posts/users/{id}", headers=headers)
+    if resp.status_code == 204:
+        flash("Successfuly deleted")
+        return redirect(url_for("index"))
+    else:
+        flash(f"Error:{resp.json()}")
+        return redirect(url_for("index"))

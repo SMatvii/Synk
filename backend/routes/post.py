@@ -146,28 +146,38 @@ def delete_post(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=f"You are not creator of this post",
         )
-
+    comments = session.scalars(select(Comment).where(Comment.post_id==post_id)).all()
+    for comment in comments:
+        session.delete(comment)
     session.delete(post)
     session.commit()
     return {"detail": f"Post with id {post_id} deleted successfully"}
 
 
-@post_router.delete("/users")
+@post_router.delete("/users/{user_id}")
 def delete_all_user_posts(
+    user_id:int,
     session: Annotated[Session, Depends(get_session)],
     current_user: Annotated[User, Depends(get_current_user)],
 ):
-    posts = session.scalars(select(Post).where(Post.user_id == current_user.id)).all()
+    if user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"You cannot do that",
+        )
+    posts = session.scalars(select(Post).where(Post.user_id == user_id)).all()
     if not posts:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"User with this id {current_user.id} didn't create any posts",
+            detail=f"User with this id {user_id} didn't create any posts",
         )
 
     for post in posts:
-        session.execute(delete(Comment).where(Comment.post_id == post.id))
+        comments = session.scalars(select(Comment).where(Comment.post_id==post.id)).all()
+        for comment in comments:
+            session.delete(comment)
         session.delete(post)
 
     return {
-        "detail": f"All posts by user with id {current_user.id} have been deleted successfully"
+        "detail": f"All posts by user with id {user_id} have been deleted successfully"
     }

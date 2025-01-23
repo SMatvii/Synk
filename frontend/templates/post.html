@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{action}} a Post</h1>
 
+<h2>{{action}} a Post</h2>
+<div class="container mt-5">
 <form method="{{method}}" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     
@@ -26,5 +27,5 @@
     {% endif %}
     <button type="submit" class="btn btn-primary">{{action}} Post</button>
 </form>
-
+</div>
 {% endblock %}
