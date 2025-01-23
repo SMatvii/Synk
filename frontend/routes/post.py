@@ -184,7 +184,7 @@ def delete_user_posts(id):
     headers = {"Authorization": f"Bearer {token}"}
 
     resp = delete(f"{BACKEND_URL}/posts/users/{id}", headers=headers)
-    if resp.status_code == 204:
+    if resp.status_code == 200:
         flash("Successfuly deleted")
         return redirect(url_for("index"))
     else:
