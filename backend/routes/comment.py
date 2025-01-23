@@ -23,7 +23,7 @@ def create_comment(
     return comment
 
 
-@comment_router.get("/{post_id}", status_code=status.HTTP_200_OK)
+@comment_router.get("/post/{post_id}", status_code=status.HTTP_200_OK)
 def get_comments_for_post(
     post_id: int, session: Annotated[Session, Depends(get_session)]
 ):
@@ -34,6 +34,18 @@ def get_comments_for_post(
             detail=f"No comments found for post with id {post_id}",
         )
     return comments
+
+@comment_router.get("/{id}", status_code=status.HTTP_200_OK)
+def get_comment(
+    id: int, session: Annotated[Session, Depends(get_session)]
+):
+    comment = session.scalar(select(Comment).where(Comment.id == id))
+    if not comment:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No comment found with id {id}",
+        )
+    return comment
 
 
 @comment_router.put("/{comment_id}")

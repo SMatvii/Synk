@@ -60,7 +60,7 @@ def see_one_post(id):
         form = CommentForm()
         user_id = post.json().get("user_id")
         user = get(f"{BACKEND_URL}/users/{user_id}")
-        comments = get(f"{BACKEND_URL}/comments/{id}")
+        comments = get(f"{BACKEND_URL}/comments/post/{id}")
         if comments.status_code == 200:
             return render_template(
                 "one_post.html",

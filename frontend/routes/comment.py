@@ -41,9 +41,8 @@ def edit_comment_page(id):
 def edit_comment(id):
     form = CommentForm()
     if form.validate_on_submit():
+        comment = get(f"{BACKEND_URL}/comments/{id}")
         content = form.content.data
-
-
         token = request.cookies.get("token")
 
         if not token:
@@ -57,12 +56,13 @@ def edit_comment(id):
             headers=headers,
             json={
                 "content": content,
+                "post_id": comment.json().get("post_id")
             },
         )
 
         if response.status_code == 200:
             flash("Comment edited successfully!", "success")
-            return redirect(url_for("see_one_post", id=id))
+            return redirect(url_for("see_one_post", id=comment.json().get("post_id")))
         else:
             flash(
                 f"There was an issue editing the comment. {response.json()}", "danger"
