@@ -60,7 +60,7 @@ def see_one_post(id):
         form = CommentForm()
         user_id = post.json().get("user_id")
         user = get(f"{BACKEND_URL}/users/{user_id}")
-        comments = get(f"{BACKEND_URL}/comments/{id}")
+        comments = get(f"{BACKEND_URL}/comments/post/{id}")
         if comments.status_code == 200:
             return render_template(
                 "one_post.html",
@@ -68,7 +68,7 @@ def see_one_post(id):
                 user=user.json(),
                 url=BACKEND_URL,
                 comments=comments.json(),
-                form=form
+                form=form,
             )
         else:
             return render_template(
@@ -76,7 +76,7 @@ def see_one_post(id):
                 post=post.json(),
                 url=BACKEND_URL,
                 user=user.json(),
-                form=form
+                form=form,
             )
     else:
         flash(f"No post with this id: {id}. Create some first.", "danger")
