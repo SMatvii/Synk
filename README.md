@@ -2,83 +2,83 @@
 
 ![Synk Logo](frontend/logo/DALL·E%202025-01-23%2010.09.29%20-%20A%20modern%20and%20minimalist%20logo%20design%20for%20a%20web-based%20social%20media%20platform%20named%20'Synk'.%20The%20logo%20should%20prominently%20feature%20the%20word%20'Synk'%20in%20a%20sleek.webp)
 
-**Synk** — це сучасна соціальна мережа, створена для публікації постів, підписки на користувачів, коментування та взаємодії в спільноті. Бекенд написаний на Python (FastAPI + SQLAlchemy), фронтенд — на Flask (Jinja2), HTML, CSS, JavaScript.
+**Synk** is a modern social media platform designed for posting, following users, commenting, and community interaction. The backend is built with Python (FastAPI + SQLAlchemy), and the frontend uses Flask (Jinja2), HTML, CSS, and JavaScript.
 
 ---
 
-## Функціонал :page_with_curl:
+## Features :page_with_curl:
 
-- **Публікація постів:** створення, перегляд та видалення постів.
-- **Коментарі:** додавання, перегляд, редагування та видалення коментарів до постів.
-- **Реєстрація та автентифікація:** захищена система реєстрації/логіну з JWT (OAuth2).
-- **Профілі користувачів:** можливість переглядати профіль, біо, кількість підписників.
-- **Підписки:** підписка/відписка на користувачів.
-- **Пошук:** пошук по контенту, користувачах.
-- **Світла/темна тема:** перемикач теми для зручності використання.
-- **Адаптивний інтерфейс:** сучасний дизайн, що працює на різних пристроях.
-- **API:** RESTful API для інтеграції та тестування (FastAPI).
+- **Post publication:** create, view, and delete posts.
+- **Comments:** add, view, edit, and delete comments on posts.
+- **Registration & authentication:** secure registration/login system using JWT (OAuth2).
+- **User profiles:** view profile, bio, follower count.
+- **Subscriptions:** follow/unfollow users.
+- **Search:** search content and users.
+- **Light/dark theme:** theme switcher for a comfortable experience.
+- **Responsive interface:** modern design, works on all devices.
+- **API:** RESTful API for integration and testing (FastAPI).
 
 ---
 
-## Як запустити? :rocket:
+## How to run? :rocket:
 
-1. **Клонування репозиторію**
+1. **Clone the repository**
     ```bash
     git clone https://github.com/SMatvii/Synk.git
     cd Synk
     ```
 
-2. **Встановлення залежностей**
+2. **Install dependencies**
     ```bash
     python -m venv venv
-    source venv/bin/activate  # або venv\Scripts\activate для Windows
+    source venv/bin/activate  # or venv\Scripts\activate for Windows
     pip install -r requirements.txt
     ```
 
-3. **Запуск backend (FastAPI)**
+3. **Run backend (FastAPI)**
     ```bash
     uvicorn backend:app --reload
     ```
-    *Переконайтесь, що у вас налаштовані змінні оточення (`.env`)*
+    *Make sure your environment variables (`.env`) are set up*
 
-4. **Запуск frontend (Flask)**
+4. **Run frontend (Flask)**
     ```bash
     cd frontend
     flask run
     ```
 
-5. **Відкрийте в браузері**  
-   - Backend API: [http://localhost:8000/docs](http://localhost:8000/docs) (інтерактивна документація Swagger)
+5. **Open in your browser**  
+   - Backend API: [http://localhost:8000/docs](http://localhost:8000/docs) (interactive Swagger documentation)
    - Frontend: [http://localhost:5000](http://localhost:5000)
 
 ---
 
-## Гайд як користуватися проєктом
+## Quick Guide
 
-1. **Реєстрація/вхід**
-    - Перейдіть на сторінку /auth, створіть обліковий запис або увійдіть.
-2. **Створення посту**
-    - Після входу ви можете створити новий пост, додати опис та контент.
-3. **Підписка на користувачів**
-    - Відкрийте профіль користувача та натисніть "Підписатися".
-4. **Коментування**
-    - Відкрийте будь-який пост, залиште свій коментар.
-5. **Пошук**
-    - Скористайтеся пошуком у верхньому меню для знаходження постів/користувачів.
-6. **Перемикання теми**
-    - Використовуйте іконку місяця/сонця для зміни теми інтерфейсу.
+1. **Register/Login**
+    - Go to /auth, create an account or log in.
+2. **Create a post**
+    - After logging in, you can create a new post with a description and content.
+3. **Follow users**
+    - Open a user's profile and click "Follow".
+4. **Comment**
+    - Open any post and leave your comment.
+5. **Search**
+    - Use the search bar in the top menu to find posts/users.
+6. **Switch theme**
+    - Use the moon/sun icon to toggle interface themes.
 
 ---
 
-## Структура проєкту
+## Project structure
 
 ```
 Synk/
-├── backend/               # FastAPI backend (API, моделі, роутери)
+├── backend/               # FastAPI backend (API, models, routers)
 │   ├── db/
 │   ├── routes/
 │   └── utils/
-├── frontend/              # Flask frontend (шаблони, статичні файли)
+├── frontend/              # Flask frontend (templates, static files)
 │   ├── templates/
 │   └── static/
 ├── requirements.txt
@@ -88,9 +88,9 @@ Synk/
 
 ---
 
-## Тестування
+## Testing
 
-Юніт-тести для основних функцій (наприклад, CRUD для коментарів, постів) знаходяться у відповідних файлах тестів, наприклад: `comment_test.py`. Для запуску:
+Unit tests for the main features (e.g., CRUD for comments, posts) can be found in their respective test files, such as: `comment_test.py`. To run:
 ```bash
 python -m unittest comment_test.py
 ```
